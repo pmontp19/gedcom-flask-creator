@@ -4,10 +4,13 @@ This project is a simple web application built with **Flask** to generate **GEDC
 
 ## Features
 
-- Add individuals with first name, last name, and birth date.
-- Define parent-child relationships.
-- Add a source of information for the entire dataset.
-- Export all data into a GEDCOM file that can be used in genealogical tools like Webtrees.
+- **Add People**: Input first name, last name, birth date, and birthplace.
+- **Dynamic Birthplace Input**: Users can either select from a predefined list of places or input a custom place. Custom places are added to the list dynamically.
+- **Add Relationships**: Define husband-wife and parent-child relationships.
+- **Source Management**: Set a data source and clear it when needed.
+- **Remove Entries**: Easily remove people, relationships, or sources via the UI.
+- **Download GEDCOM File**: Export the current state of the data to a GEDCOM file.
+- **Responsive Design**: Works across devices with a two-column layout on wide screens and a single-column layout on mobile.
 
 ## Requirements
 
@@ -47,25 +50,26 @@ Running the Application
 Usage
 -----
 
-### Adding People
-
-1.  In the main form, enter the details for each person (first name, last name, and birth date in the format DD/MM/YYYY).
-2.  Click "Add Person".
-
-### Defining Relationships
-
-1.  Once you have added people, you can select two people to define a parent-child relationship.
-2.  Select a parent and a child from the dropdown menus and click "Add Relationship".
-
-### Setting a Source
-
-1.  In the "Set Source" section, enter the source of the information (e.g., "Civil Registry of Barcelona").
-2.  Click "Set Source". This information will be added to each entry in the GEDCOM.
-
-### Exporting the GEDCOM File
-
-1.  After you have added all people and relationships, you can download the GEDCOM file.
-2.  Click on "Download GEDCOM File" to obtain the `output.ged` file.
+1.  **Add a Person**:
+    
+    *   Enter the first name, last name, birth date, and select or type the birthplace.
+    *   The birth date uses an HTML5 date picker, and the birthplace can be either selected from a list or entered as free text.
+    *   The birthplace input will dynamically add new places to the predefined list.
+2.  **Add Relationships**:
+    
+    *   After adding people, you can define relationships (Husband-Wife or Parent-Child) between them.
+    *   Select from the people you’ve already added.
+3.  **Remove People or Relationships**:
+    
+    *   Each person or relationship added has a "Remove" button next to it.
+    *   Simply click "Remove" to delete the person or relationship from the list.
+4.  **Set or Clear Source**:
+    
+    *   You can add a data source to track the origin of the data.
+    *   A "Clear Source" button is available to remove the current source.
+5.  **Download GEDCOM**:
+    
+    *   Click "Download GEDCOM File" to export the current data in GEDCOM format.
 
 GEDCOM File Structure
 ---------------------
@@ -84,6 +88,13 @@ Contributions are welcome to improve the project. If you would like to contribut
 3.  Commit your changes (`git commit -m 'Add new feature'`).
 4.  Push the branch (`git push origin feature/new-feature`).
 5.  Open a pull request.
+
+Roadmap
+-------
+
+* **Persistent Storage**: Implement a persistent data storage system (e.g., SQLite or a JSON file) to retain data between sessions.
+* **Validation**: Add more advanced validation for relationships and data entry.
+* **Extended GEDCOM Export**: Implement support for additional GEDCOM tags and features.
 
 License
 -------

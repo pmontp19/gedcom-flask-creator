@@ -4,78 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GEDCOM File Creator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>GEDCOM File Creator</h1>
 
-    <!-- Form to add people -->
-    <h2>Add Person</h2>
-    <form action="/add_person" method="post">
-        <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" required><br>
-        <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" required><br>
-        <label for="birth_date">Birth Date (DD/MM/YYYY):</label>
-        <input type="text" id="birth_date" name="birth_date" required><br><br>
-        <input type="submit" value="Add Person">
-    </form>
+    <div class="container">
+        <!-- Left column: Forms -->
+        <div class="left-column">
+            <!-- Form to add people -->
+            <h2>Add Person</h2>
+            <form action="/add_person" method="post">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" required><br>
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" required><br>
+                <label for="birth_date">Birth Date:</label>
+                <input type="date" id="birth_date" name="birth_date" required><br>
 
-    <!-- Display validation messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <ul>
-        {% for category, message in messages %}
-            <li style="color: {% if category == 'error' %}red{% else %}green{% endif %}">{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
+                <!-- Input for birth place with free text or predefined suggestions -->
+                <label for="birth_place">Birth Place (Country, State, City):</label>
+                <input type="text" id="birth_place" name="birth_place" list="places" required>
+                <datalist id="places">
+                    {% for place in birth_places %}
+                        <option value="{{ place }}">
+                    {% endfor %}
+                </datalist>
+                <br><br>
 
-    <!-- List of added people -->
-    <h2>People</h2>
-    <ul>
-    {% for person in people %}
-        <li>{{ person.first_name }} {{ person.last_name }} ({{ person.birth_date }})</li>
-    {% endfor %}
-    </ul>
+                <label for="sex">Sex:</label>
+                <select name="sex" id="sex" required>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="X">Intersex</option>
+                    <option value="U">Unknown</option>
+                </select><br><br>
+                
+                <input type="submit" value="Add Person">
+            </form>
+        </div>
 
-    <!-- Form to add relationships -->
-    <h2>Add Relationship (Parent - Child)</h2>
-    <form action="/add_relationship" method="post">
-        <label for="parent">Parent:</label>
-        <select name="parent" id="parent" required>
+        <!-- Right column: Lists of people and relationships -->
+        <div class="right-column">
+            <!-- Display validation messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+
+            <!-- List of added people with remove button -->
+            <h2>People</h2>
+            <ul>
             {% for person in people %}
-                <option value="{{ person.id }}">{{ person.first_name }} {{ person.last_name }}</option>
+                <li>
+                    {{ person.first_name }} {{ person.last_name }} ({{ person.birth_date }}) - Born in {{ person.birth_place }}
+                    <form action="/delete_person/{{ person.id }}" method="post" class="delete-form">
+                        <button type="submit" class="delete-btn">Remove</button>
+                    </form>
+                </li>
             {% endfor %}
-        </select><br>
-        <label for="child">Child:</label>
-        <select name="child" id="child" required>
-            {% for person in people %}
-                <option value="{{ person.id }}">{{ person.first_name }} {{ person.last_name }}</option>
+            </ul>
+
+            <!-- List of added relationships with remove button -->
+            <h2>Relationships</h2>
+            <ul>
+            {% for relationship in relationships %}
+                <li>
+                    Husband: {{ people[relationship.husband-1].first_name }} {{ people[relationship.husband-1].last_name }} — 
+                    Wife: {{ people[relationship.wife-1].first_name }} {{ people[relationship.wife-1].last_name }} — 
+                    Relationship Type: {{ relationship.relationship_type }}
+                    <form action="/delete_relationship/{{ loop.index0 }}" method="post" class="delete-form">
+                        <button type="submit" class="delete-btn">Remove</button>
+                    </form>
+                </li>
             {% endfor %}
-        </select><br><br>
-        <input type="submit" value="Add Relationship">
-    </form>
+            </ul>
 
-    <!-- List of added relationships -->
-    <h2>Relationships</h2>
-    <ul>
-    {% for relationship in relationships %}
-        <li>Parent: {{ people[relationship.parent-1].first_name }} {{ people[relationship.parent-1].last_name }} — Child: {{ people[relationship.child-1].first_name }} {{ people[relationship.child-1].last_name }}</li>
-    {% endfor %}
-    </ul>
+            <!-- Source with clear source button -->
+            <h2>Source</h2>
+            {% if sour %}
+                <p>{{ sour }}</p>
+                <form action="/clear_source" method="post" class="delete-form">
+                    <button type="submit" class="delete-btn">Clear Source</button>
+                </form>
+            {% else %}
+                <p>No source set</p>
+            {% endif %}
 
-    <!-- Form to set source -->
-    <h2>Set Source</h2>
-    <form action="/set_source" method="post">
-        <label for="sour">Source:</label>
-        <input type="text" id="sour" name="sour" value="{{ sour }}" required><br><br>
-        <input type="submit" value="Set Source">
-    </form>
+            <!-- Form to set source -->
+            <h2>Set Source</h2>
+            <form action="/set_source" method="post">
+                <label for="sour">Source:</label>
+                <input type="text" id="sour" name="sour" value="{{ sour }}" required><br><br>
+                <input type="submit" value="Set Source">
+            </form>
 
-    <!-- Button to download the GEDCOM file -->
-    <h2>Export GEDCOM</h2>
-    <a href="/download_gedcom">Download GEDCOM File</a>
-
+            <!-- Button to download the GEDCOM file -->
+            <a href="/download_gedcom">Download GEDCOM File</a>
+        </div>
+    </div>
 </body>
 </html>

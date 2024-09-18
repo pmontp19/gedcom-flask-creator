@@ -1,0 +1,142 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Style for general forms (excluding delete buttons) */
+form:not(.delete-form) {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background-color: #fff;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between; /* Align the remove button to the right */
+  align-items: center; /* Vertically center the text and button */
+}
+
+/* Ensure the delete form is inline */
+li form.delete-form {
+  display: inline;
+}
+
+/* Styles for the remove buttons that look like links */
+button.delete-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9em;
+  margin-left: 10px;
+  padding: 0;
+}
+
+button.delete-btn:hover {
+  color: #0056b3;
+  text-decoration: none;
+}
+
+a {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+a:hover {
+  background-color: #218838;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.left-column, .right-column {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Two-column layout for wide screens */
+@media (min-width: 768px) {
+  .container {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+  }
+
+  .left-column {
+      width: 48%;
+      padding-right: 10px;
+  }
+
+  .right-column {
+      width: 48%;
+      padding-left: 10px;
+  }
+}
